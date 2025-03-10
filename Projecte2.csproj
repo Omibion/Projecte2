@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net9.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Assets\a87cd7da-42da-4113-8651-363bb2160f0a.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MongoDB.Driver" Version="3.2.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Assets\a87cd7da-42da-4113-8651-363bb2160f0a.jpg" />
+  </ItemGroup>
+
+</Project>

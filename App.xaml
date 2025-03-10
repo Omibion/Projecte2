@@ -1,0 +1,9 @@
+﻿<Application x:Class="Projecte2.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:Projecte2"
+             StartupUri="Views/Loggin.xaml">
+    <Application.Resources>
+         
+    </Application.Resources>
+</Application>

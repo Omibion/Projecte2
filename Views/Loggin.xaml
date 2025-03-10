@@ -1,0 +1,27 @@
+﻿<Window x:Class="Projecte2.Views.Loggin"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Projecte2.Views"
+        mc:Ignorable="d"
+        Title="Loggin" Height="450" Width="800">
+    <Grid>
+        <Grid.Background>
+            <ImageBrush ImageSource="C:/Users/isard/Desktop/Projecte2-David-Holgado/Projecte2/Assets/a87cd7da-42da-4113-8651-363bb2160f0a.jpg" Stretch="UniformToFill"/>
+        </Grid.Background>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Border Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Background="White" Opacity="0.7" Padding="20">
+            <StackPanel>
+                <TextBlock Text="Usuari:"/>
+                <TextBox x:Name="txtUsuario" Width="100" Margin="10"/>
+                <TextBlock Text="Contrasenya:"/>
+                <PasswordBox x:Name="txtContrasenya" Width="100" Margin="10"/>
+                <Button Content="Entrar" Click="Button_Click" Margin="10"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>
