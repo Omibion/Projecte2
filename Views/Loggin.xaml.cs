@@ -56,8 +56,8 @@ namespace Projecte2.Views
                     if (password == storedPassword)
                     {
                         MessageBox.Show($"✅ Bienvenido {username}.");
-                        MainWindow mainWindow = new MainWindow();
-                        mainWindow.Show();
+                        Principal principal = new Principal();
+                        principal.Show();
                         this.Close();
                     }
                     else
@@ -118,6 +118,14 @@ namespace Projecte2.Views
                 byte[] bytes = Encoding.UTF8.GetBytes(input);
                 byte[] hash = sha512.ComputeHash(bytes);
                 return BitConverter.ToString(hash).Replace("-", "").ToLower();
+            }
+        }
+
+        private void Input_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                Button_Click(sender, e);
             }
         }
     }
