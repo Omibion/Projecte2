@@ -20,16 +20,32 @@ namespace Projecte2.Views
         public ObservableCollection<int> PageNumbers { get; set; }
         MongoClient client = new MongoClient("mongodb://localhost:27017");
         List<Producte> productes = new List<Producte>();
-
+        Cistell cistell = new Cistell();
         public Principal(Usuari usuari)
         {
             InitializeComponent();
             user = usuari;
             IMongoDatabase database = client.GetDatabase("Botiga");
             IMongoCollection<Producte> collection = database.GetCollection<Producte>("Productes");
-
+            if(cistell.productes==null||cistell.productes.Count == 0)
+            {
+                ConstruirCistell(database, cistell);
+            }
             PageNumbers = new ObservableCollection<int>();
             DataContext = this;
+            productes = getAllProducts(collection);
+            numResults.SelectedIndex = 1;
+            ItemsListView.ItemsSource = ProductPaginator.Paginator(1, resultsPerPage, productes);
+        }
+        public Principal(Usuari usuari, Cistell cistella)
+        {
+            InitializeComponent();
+            user = usuari;
+            IMongoDatabase database = client.GetDatabase("Botiga");
+            IMongoCollection<Producte> collection = database.GetCollection<Producte>("Productes");
+            PageNumbers = new ObservableCollection<int>();
+            DataContext = this;
+            cistell = cistella;
             productes = getAllProducts(collection);
             numResults.SelectedIndex = 1;
             ItemsListView.ItemsSource = ProductPaginator.Paginator(1, resultsPerPage, productes);
@@ -214,11 +230,24 @@ namespace Projecte2.Views
         {
             if (ItemsListView.SelectedItem is Producte productoSeleccionado)
             {
-                FichaProducto fichaProducto = new FichaProducto(productoSeleccionado,user);
+                FichaProducto fichaProducto = new FichaProducto(productoSeleccionado,user,cistell);
                 fichaProducto.Show();
                 this.Hide();
                 ItemsListView.SelectedItem = null;
             }
+        }
+        private void ConstruirCistell(IMongoDatabase database,Cistell cistell)
+        {
+            if (cistell == null)
+            {
+                throw new ArgumentNullException(nameof(cistell), "El objeto cistell no puede ser nulo");
+            }
+            IMongoCollection<Cistell> collection = database.GetCollection<Cistell>("Cistell");
+
+            cistell.id_usuari = user.Id; 
+            cistell._id = ObjectId.GenerateNewId();
+
+            collection.InsertOne(cistell);
         }
     }
 }
