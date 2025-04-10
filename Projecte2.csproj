@@ -10,14 +10,23 @@
 
   <ItemGroup>
     <None Remove="Assets\a87cd7da-42da-4113-8651-363bb2160f0a.jpg" />
+    <None Remove="Assets\imagen_por_defecto.jpg" />
+    <None Remove="Assets\placeholder-image.jpg" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Extended.Wpf.Toolkit" Version="4.7.25104.5739" />
     <PackageReference Include="MongoDB.Driver" Version="3.2.1" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="Assets\a87cd7da-42da-4113-8651-363bb2160f0a.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\placeholder-image.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
 </Project>

@@ -1,25 +1,31 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
-using MongoDB.Bson;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
-namespace Projecte2.Model
+public class Categoria : INotifyPropertyChanged
 {
-    public class Categoria
+    public ObjectId Id { get; set; }
+    public string Nom { get; set; }
+    public ObjectId? IdCategoriaPare { get; set; }
+
+    [BsonIgnore]
+    public List<Categoria> Subcategories { get; set; } = new List<Categoria>();
+
+    // Añade aquí otras propiedades que necesites
+    public string Descripcio { get; set; }
+
+    public event PropertyChangedEventHandler PropertyChanged;
+
+    protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
     {
-        [BsonId]  
-        public ObjectId Id { get; set; } 
-
-        [BsonElement("nom")] 
-        public string nom { get; set; } 
-
-        [BsonElement("id_categoria_pare")]
-        public ObjectId? IdCategoriaPare { get; set; } 
-
-        [BsonElement("categoria")]
-        public List<Categoria> subcategorias { get; set; }  
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
+
+    public List<Categoria> GetSubcategories()
+    {
+        return Subcategories;
+    }
+
+   
 }

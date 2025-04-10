@@ -13,7 +13,9 @@ namespace Projecte2.Model
         [BsonId]
         public ObjectId Id { get; set; }
 
-        [BsonElement("categoria")]
-        public string categoria { get; set; }
+        [BsonElement("tipus")]
+        public string Tipus { get; set; }
+        [BsonElement("percentatge")]
+        public double Percentatge { get; set; }
     }
 }

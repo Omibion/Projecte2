@@ -1,7 +1,9 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Driver;
+using Projecte2.Model;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -35,7 +37,7 @@ namespace Projecte2.Views
                 string connectionString = "mongodb://localhost:27017";
                 var client = new MongoClient(connectionString);
                 var database = client.GetDatabase("Botiga");
-                var collection = database.GetCollection<BsonDocument>("Usuari");
+                var collection = database.GetCollection<Usuari>("Usuari");
 
                 string username = txtUsuario.Text;
                 string password = ComputeSha512Hash(txtContrasenya.Password);
@@ -46,17 +48,18 @@ namespace Projecte2.Views
                     return;
                 }
 
-                var filter = Builders<BsonDocument>.Filter.Eq("username", username);
+                var filter = Builders<Usuari>.Filter.Eq(u => u.Username, username);
                 var usuario = collection.Find(filter).FirstOrDefault();
 
                 if (usuario != null)
                 {
-                    string storedPassword = usuario["password"].AsString;
-
-                    if (password == storedPassword)
+                    if (password == usuario.PasswordEncriptada)
                     {
                         MessageBox.Show($"✅ Bienvenido {username}.");
-                        Principal principal = new Principal();
+
+                        ObjectId userId = usuario.Id;
+
+                        Principal principal = new Principal(usuario);
                         principal.Show();
                         this.Close();
                     }
@@ -73,6 +76,7 @@ namespace Projecte2.Views
             catch (Exception ex)
             {
                 MessageBox.Show("❌ Error al iniciar sesión: " + ex.Message);
+                Debug.WriteLine(ex.Message);
             }
         }
 
@@ -83,24 +87,24 @@ namespace Projecte2.Views
                 string connectionString = "mongodb://localhost:27017";
                 var client = new MongoClient(connectionString);
                 var database = client.GetDatabase("Botiga");
-                var collection = database.GetCollection<BsonDocument>("Usuari");
+                var collection = database.GetCollection<Usuari>("Usuari");
 
                 string username = "admin";
                 string contrasenya = "admin";
                 string hashedPassword = ComputeSha512Hash(contrasenya);
 
-
-
-                var filtre = Builders<BsonDocument>.Filter.Eq("username", username);
-                var existingUser = collection.Find(filtre).FirstOrDefault();
+                var filter = Builders<Usuari>.Filter.Eq(u => u.Username, username);
+                var existingUser = collection.Find(filter).FirstOrDefault();
 
                 if (existingUser == null)
                 {
-                    var newUser = new BsonDocument
+                    var newUser = new Usuari
                     {
-                        { "username", username },
-                        { "password", hashedPassword }
+                        Username = username,
+                        PasswordEncriptada = hashedPassword,
+                        Direccions = new List<Direccio>() 
                     };
+
                     collection.InsertOne(newUser);
                     MessageBox.Show("✅ Usuario admin insertado correctamente.");
                 }

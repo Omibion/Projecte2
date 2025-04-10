@@ -32,13 +32,22 @@ namespace Projecte2.Model
         public List<string> fotos { get; set; } 
 
         [BsonElement("variants")]
-        public List<Variant> variants { get; set; } 
+        public List<Variant> variants { get; set; }
+        public string PrimeraFoto => fotos != null && fotos.Count > 0 ? fotos[0] : "/Assets/placeholder-image.jpg";
+
     }
+
 
     public class Variant
     {
+        [BsonId]
+        public ObjectId Id { get; set; }
+
         [BsonElement("color")]
-        public string Color { get; set; }  
+        public string Color { get; set; }
+
+        [BsonElement("preu")]
+        public double Preu { get; set; }
 
         [BsonElement("talles")]
         public List<Talla> Talles { get; set; }  
@@ -46,8 +55,8 @@ namespace Projecte2.Model
 
     public class Talla
     {
-        [BsonElement("_ID_talla")]
-        public ObjectId IdTalla { get; set; } 
+        [BsonId]
+        public ObjectId Id { get; set; }
 
         [BsonElement("numero")]
         public int Numero { get; set; }  
@@ -55,5 +64,7 @@ namespace Projecte2.Model
         [BsonElement("stock")]
         public int Stock { get; set; } 
     }
+
+   
 
 }

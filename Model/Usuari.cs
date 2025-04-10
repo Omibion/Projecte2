@@ -16,14 +16,14 @@ namespace Projecte2.Model
         [BsonId] 
         public ObjectId Id { get; set; } 
 
-        [BsonElement("_login")]
-        public string login { get; set; } 
+        [BsonElement("username")]
+        public string Username { get; set; } 
 
         [BsonElement("password")]
-        public string passwordEncriptada { get; set; } 
+        public string PasswordEncriptada { get; set; } 
 
         [BsonElement("direccions")]
-        public List<Direccio> direccions { get; set; } 
+        public List<Direccio>? Direccions { get; set; } 
     }
 
     public class Direccio

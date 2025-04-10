@@ -9,35 +9,60 @@
         WindowState="Maximized">
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-
-        <ListView x:Name="ItemsListView" Grid.Row="0">
-            <!-- Define the columns and data template here -->
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="auto" />
+            </Grid.ColumnDefinitions>
+            <local:FiltresUserControl Grid.Column="0" x:Name="FiltresControl" Margin="10" HorizontalAlignment="Center"/>
+            <StackPanel Grid.Column="1" Orientation="Vertical" Margin="10">
+                <Button Content="Filtrar" Click="Filtre_Button_Click" Margin="10" HorizontalAlignment="Right"/>
+                <Button Content="Netejar" Click="Netejar_Button_Click" Margin="10" HorizontalAlignment="Right"/>
+            </StackPanel>
+        </Grid>
+        <ListView x:Name="ItemsListView" Grid.Row="1" SelectionChanged="ItemsListView_SelectionChanged">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <local:ProducteUserControl/>
+                </DataTemplate>
+            </ListView.ItemTemplate>
         </ListView>
-
-        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
-            <ComboBox x:Name="numResults" Width="60" Margin="0,0,10,0" SelectionChanged="NumResults_SelectionChanged">
-                <ComboBoxItem Content="5" />
-                <ComboBoxItem Content="10" />
-                <ComboBoxItem Content="15" />
-                <ComboBoxItem Content="20" />
-                <ComboBoxItem Content="25" />
-            </ComboBox>
-            <ItemsControl x:Name="PaginationControl" ItemsSource="{Binding PageNumbers}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel Orientation="Horizontal" />
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Button Content="{Binding}" Click="PageButton_Click" Margin="2" />
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </StackPanel>
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
+                <ComboBox x:Name="numResults" Width="60" Margin="0,0,10,0" SelectionChanged="NumResults_SelectionChanged">
+                    <ComboBoxItem Content="5" />
+                    <ComboBoxItem Content="10" />
+                    <ComboBoxItem Content="15" />
+                    <ComboBoxItem Content="20" />
+                    <ComboBoxItem Content="25" />
+                </ComboBox>
+                <ItemsControl x:Name="PaginationControl" ItemsSource="{Binding PageNumbers}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Button Content="{Binding}" Click="PageButton_Click" Margin="2" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+            <Button Grid.Column="1" 
+                    Content="Carretó" 
+                    Margin="10" 
+                    Padding="20,5"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"/>
+        </Grid>
     </Grid>
 </Window>
-

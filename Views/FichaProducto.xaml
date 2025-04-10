@@ -1,0 +1,93 @@
+﻿<Window x:Class="Projecte2.Views.FichaProducto"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Projecte2.Views"
+        mc:Ignorable="d"
+        WindowStyle="None"
+        Title="FichaProducto" Height="450" Width="800">
+    <Grid Margin="20">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="0">
+            <Image x:Name="ProductImage" Stretch="Uniform" />
+            <Grid Grid.Row="1" Margin="0,10,0,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Image x:Name="ProductImage1" Grid.Column="0" Stretch="Uniform" Margin="5"/>
+                <Image x:Name="ProductImage2" Grid.Column="1" Stretch="Uniform" Margin="5"/>
+                <Image x:Name="ProductImage3" Grid.Column="2" Stretch="Uniform" Margin="5"/>
+                <Image x:Name="ProductImage4" Grid.Column="3" Stretch="Uniform" Margin="5"/>
+            </Grid>
+        </Grid>
+        <Grid Grid.Column="1" Margin="10,0,0,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Button x:Name="Torna" Content="Torna" HorizontalAlignment="Right" VerticalAlignment="Top" Click="Torna_Click" Grid.Row="0"/>
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                <StackPanel>
+                    <TextBlock x:Name="ProductName" FontSize="24" FontWeight="Bold" Margin="0,10" 
+                               HorizontalAlignment="Center" TextWrapping="Wrap"/>
+                    <TextBlock x:Name="ProductDescription" FontSize="16" Margin="0,10" 
+                               HorizontalAlignment="Center" TextWrapping="Wrap"/>
+                    <Grid Margin="0,10" HorizontalAlignment="Stretch">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock x:Name="ProductPrice" FontSize="20" FontWeight="Bold" 
+                                   Grid.Column="0" VerticalAlignment="Center" Margin="5"/>
+                        <ComboBox x:Name="VariantCmb" Grid.Column="1" Margin="5" 
+                                  DisplayMemberPath="Color" HorizontalAlignment="Stretch"/>
+                        <ComboBox x:Name="CmbTallas" Grid.Column="2" Margin="5" 
+                                  HorizontalAlignment="Stretch"/>
+                    </Grid>
+                    <Grid Margin="0,10" HorizontalAlignment="Stretch">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Quantitat:" VerticalAlignment="Center" Margin="5"/>
+                        <ComboBox x:Name="CmbQuantitat" Grid.Column="1" Margin="5" HorizontalAlignment="Stretch">
+                            <ComboBoxItem>1</ComboBoxItem>
+                            <ComboBoxItem>2</ComboBoxItem>
+                            <ComboBoxItem>3</ComboBoxItem>
+                            <ComboBoxItem>4</ComboBoxItem>
+                            <ComboBoxItem>5</ComboBoxItem>
+                        </ComboBox>
+                    </Grid>
+                </StackPanel>
+            </ScrollViewer>
+            <Button x:Name="AddToCartButton" Content="Afegir al carretó" Width="200" Height="35" 
+                    Margin="0,10" Grid.Row="2" HorizontalAlignment="Center" Click="AddToCartButton_Click"/>
+            <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10">
+                <TextBlock Text="Stock:" VerticalAlignment="Center" Margin="5"/>
+                <TextBox x:Name="StockTextBox" Width="50" Height="30" Margin="5" TextAlignment="Center"/>
+           
+                <Button x:Name="Desastock" Content="Desa Stock" Margin="10,5" Click="Desastock_Click"/>
+            </StackPanel>
+            
+        </Grid>
+        <Button Grid.Column="1" 
+            Content="Carretó" 
+            Margin="5" 
+            Padding="20,5"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Bottom"/>
+    </Grid>
+</Window>
