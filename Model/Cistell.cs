@@ -18,6 +18,7 @@ namespace Projecte2.Model
         public double preu_unitari { get; set; }
         public double descompte { get; set; }
         public double preu_total { get; set; }
+        public double preu_IVA { get; set; }
         public double preu_total_IVA { get; set; }  
         public double preu_final { get; set; }
     }
@@ -36,13 +37,13 @@ namespace Projecte2.Model
         public List<ProducteACistell>? productes { get; set; } = new List<ProducteACistell>();
 
         [BsonElement("preu_abans_IVA")]
-        public double? preu_abans_IVA { get; set; }  
+        public double? preu_abans_IVA { get; set; } = 0;
 
         [BsonElement("preu_total_IVA")]
-        public double? preu_total_IVA { get; set; }  
+        public double? preu_total_IVA { get; set; } = 0;
 
         [BsonElement("preu_total_a_pagar")]
-        public double? preu_total_a_pagar { get; set; } 
+        public double? preu_total_a_pagar { get; set; } = 0;
     }
    
 }

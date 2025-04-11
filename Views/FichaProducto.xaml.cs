@@ -1,6 +1,7 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Driver;
 using Projecte2.Builders;
+using Projecte2.Helpers;
 using Projecte2.Model;
 using System;
 using System.Collections.Generic;
@@ -146,82 +147,97 @@ namespace Projecte2.Views
 
         private void AddToCartButton_Click(object sender, RoutedEventArgs e)
         {
-            if(CmbTallas.SelectedItem != null)
+            try
             {
-                int stock = int.Parse(StockTextBox.Text);
-                if (stock > 0)
+
+                if (CmbTallas.SelectedItem == null || VariantCmb.SelectedItem == null || CmbQuantitat.SelectedItem == null)
                 {
-                    int talla = (int)CmbTallas.SelectedItem;
-                    int variantIndex = VariantCmb.SelectedIndex;
-                    int stockVariant = _producte.variants[variantIndex].Talles.First(t => t.Numero == talla).Stock;
-                    if (stockVariant > 0)
+                    MessageBox.Show("❌ Por favor, selecciona todas las opciones (talla, variante y cantidad)");
+                    return;
+                }
+
+                int talla = (int)CmbTallas.SelectedItem;
+                int variantIndex = VariantCmb.SelectedIndex;
+                int quantitat = int.Parse(((ComboBoxItem)CmbQuantitat.SelectedItem).Content.ToString());
+
+                if (quantitat < 1)
+                {
+                    MessageBox.Show("❌ La cantidad debe ser mayor que 0");
+                    return;
+                }
+
+
+                var tallaSeleccionada = _producte.variants[variantIndex].Talles.FirstOrDefault(t => t.Numero == talla);
+                if (tallaSeleccionada == null || tallaSeleccionada.Stock < quantitat)
+                {
+                    MessageBox.Show("❌ No hay suficiente stock disponible");
+                    return;
+                }
+
+             
+
+                var database = client.GetDatabase("Botiga");
+                var collectionProductes = database.GetCollection<Producte>("Productes");
+  
+
+                var producteACistell = ProducteAcistellBuilder.build(
+                    _producte,
+                    _producte.variants[variantIndex].Color,
+                    talla.ToString(),
+                    quantitat,
+                    _producte.variants[variantIndex].Preu,
+                    iva_general
+                );
+                
+                var collectionCistell = database.GetCollection<Cistell>("Cistell");
+                var filterCistell = Builders<Cistell>.Filter.Eq(c => c._id, cistell._id);
+
+            
+                var cistellExistente = collectionCistell.Find(filterCistell).FirstOrDefault();
+
+                if (cistellExistente == null)
+                {
+                   
+                    var nouCistell = new Cistell
                     {
-                        _producte.variants[variantIndex].Talles.First(t => t.Numero == talla).Stock--;
-                        IMongoCollection<Producte> collection = client.GetDatabase("Botiga").GetCollection<Producte>("Productes");
-                        var filter = Builders<Producte>.Filter.Eq(p => p.nom, _producte.nom);
-                        var update = Builders<Producte>.Update.Set(p => p.variants[variantIndex].Talles.First(t => t.Numero == talla).Stock, stockVariant - 1);
-                        if (cistell.productes == null)
-                        {
-                            cistell.productes = new List<ProducteACistell>();
-                        }
-                        try
-                        {
-                            // Verificar que los valores seleccionados no sean nulos
-                            if (VariantCmb.SelectedValue == null || CmbTallas.SelectedValue == null || CmbQuantitat.SelectedValue == null)
-                            {
-                                MessageBox.Show("Por favor, selecciona todas las opciones");
-                                return;
-                            }
-                            int quantitat = int.Parse(CmbQuantitat.SelectedValue.ToString());
-                            // Convertir cantidad de forma segura
-                            if (quantitat!=null||quantitat<1)
-                            {
-                                MessageBox.Show("La cantidad seleccionada no es válida");
-                                return;
-                            }
+                        _id = ObjectId.GenerateNewId(),
+                        id_usuari = user.Id, 
+                        productes = new List<ProducteACistell> { producteACistell },
+                        preu_abans_IVA = producteACistell.preu_total,
+                        preu_total_IVA = producteACistell.preu_total * (iva_general / 100),
+                        preu_total_a_pagar = producteACistell.preu_total * (1 + (iva_general / 100))
+                    };
+                    collectionCistell.InsertOne(nouCistell);
+                }
+                else
+                {
+                    
+                    var update = Builders<Cistell>.Update
+                        .Push(c => c.productes, producteACistell);
 
-                            // Verificar que el índice de la variante es válido
-                            if (VariantCmb.SelectedIndex < 0 || VariantCmb.SelectedIndex >= _producte.variants.Count)
-                            {
-                                MessageBox.Show("La variante seleccionada no es válida");
-                                return;
-                            }
-
-                            // Obtener los valores seleccionados
-                            string variant = VariantCmb.SelectedValue.ToString();
-                            string tallas = CmbTallas.SelectedValue.ToString();
-                            double preu = _producte.variants[VariantCmb.SelectedIndex].Preu;
-
-                            // Construir el producto
-                            ProducteACistell producteA = ProducteAcistellBuilder.build(
-                                variant,
-                                tallas,
-                                quantitat,
-                                preu,
-                                iva_general
-                            );
-                            cistell.productes.Add(producteA);
-                            MessageBox.Show("✅ Producte afegit al cistell.");
-                            // Aquí puedes usar producteA...
-                        }
-                        catch (Exception ex)
-                        {
-                            MessageBox.Show($"Error al crear el producto: {ex.Message}");
-                            Debug.WriteLine(ex.ToString());
-                        }
-                        ;
-                       
-                        this.Close();
+                    
+                    if (cistellExistente.preu_abans_IVA != null)
+                    {
+                        update = update.Inc(c => c.preu_abans_IVA, producteACistell.preu_total);
+                        update = update.Inc(c => c.preu_total_IVA, producteACistell.preu_total * (iva_general / 100));
+                        update = update.Inc(c => c.preu_total_a_pagar, producteACistell.preu_total * (1 + (iva_general / 100)));
                     }
                     else
                     {
-                        MessageBox.Show("❌ No hi ha stock disponible per aquesta talla.");
+                        
+                        update = update.Set(c => c.preu_abans_IVA, CalculPreusCistellHelper.CalculaPreuAbansIvaCistell(cistell.productes));
+                        update = update.Set(c => c.preu_total_IVA, CalculPreusCistellHelper.CalculaPreuTotalIvaCistell(cistell.productes));
+                        update = update.Set(c => c.preu_total_a_pagar, CalculPreusCistellHelper.CalculaPreuTotalCistell(cistell.productes));
                     }
+
+                    collectionCistell.UpdateOne(filterCistell, update);
                 }
+
+                MessageBox.Show("✅ Producto añadido al carrito");
             }
-            else
+            catch (Exception ex)
             {
-                MessageBox.Show("❌ Selecciona una talla.");
+                MessageBox.Show($"❌ Error: {ex.Message}");
             }
         }
 
