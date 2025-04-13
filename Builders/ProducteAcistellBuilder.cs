@@ -9,20 +9,21 @@ namespace Projecte2.Builders
 {
     public class ProducteAcistellBuilder
     {
-        public static ProducteACistell build(Producte prod,String var, String talla,int quantitat, double preuUnitari, double IVA)
+        public static ProducteACistell build(Producte prod, string var, string talla, int quantitat, double preuUnitari, double IVA)
         {
             ProducteACistell producte = new ProducteACistell();
             producte.id_producte = prod.Id;
             producte.variant = var;
             producte.talla = talla;
             producte.quantitat = quantitat;
-            producte.preu_unitari = preuUnitari;
-            producte.preu_total=preuUnitari * quantitat;
+            producte.preu_unitari = Math.Round(preuUnitari, 2);
+            producte.preu_total = Math.Round(preuUnitari * quantitat, 2);
             producte.descompte = 0;
-            producte.preu_IVA = (producte.preu_total * IVA) / 100;
-            producte.preu_final = producte.preu_total - ((producte.preu_total * producte.descompte) / 100);
-            producte.preu_total_IVA = producte.preu_final + ((producte.preu_final * IVA) / 100);
+            producte.preu_IVA = Math.Round((producte.preu_total * IVA) / 100, 2);
+            producte.preu_final = Math.Round(producte.preu_total - ((producte.preu_total * producte.descompte) / 100), 2);
+            producte.preu_total_IVA = Math.Round(producte.preu_final + ((producte.preu_final * IVA) / 100), 2);
             return producte;
         }
+
     }
 }

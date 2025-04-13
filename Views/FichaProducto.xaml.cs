@@ -62,6 +62,7 @@ namespace Projecte2.Views
                     StockTextBox.Text = producte.variants[VariantCmb.SelectedIndex].Talles.First(talla => talla.Numero == (int)CmbTallas.SelectedItem).Stock.ToString();
                 }
             };
+            BotoCarreto.Cistell = cistella;
         }
 
         private double calculaPreuIva(double preu, double iva)
@@ -149,7 +150,6 @@ namespace Projecte2.Views
         {
             try
             {
-
                 if (CmbTallas.SelectedItem == null || VariantCmb.SelectedItem == null || CmbQuantitat.SelectedItem == null)
                 {
                     MessageBox.Show("❌ Por favor, selecciona todas las opciones (talla, variante y cantidad)");
@@ -166,7 +166,6 @@ namespace Projecte2.Views
                     return;
                 }
 
-
                 var tallaSeleccionada = _producte.variants[variantIndex].Talles.FirstOrDefault(t => t.Numero == talla);
                 if (tallaSeleccionada == null || tallaSeleccionada.Stock < quantitat)
                 {
@@ -174,63 +173,80 @@ namespace Projecte2.Views
                     return;
                 }
 
-             
-
                 var database = client.GetDatabase("Botiga");
-                var collectionProductes = database.GetCollection<Producte>("Productes");
-  
-
-                var producteACistell = ProducteAcistellBuilder.build(
-                    _producte,
-                    _producte.variants[variantIndex].Color,
-                    talla.ToString(),
-                    quantitat,
-                    _producte.variants[variantIndex].Preu,
-                    iva_general
-                );
-                
                 var collectionCistell = database.GetCollection<Cistell>("Cistell");
-                var filterCistell = Builders<Cistell>.Filter.Eq(c => c._id, cistell._id);
 
-            
-                var cistellExistente = collectionCistell.Find(filterCistell).FirstOrDefault();
+                var filterCistellUsuario = Builders<Cistell>.Filter.Eq(c => c.id_usuari, user.Id);
+                var cistellExistente = collectionCistell.Find(filterCistellUsuario).FirstOrDefault();
 
                 if (cistellExistente == null)
                 {
-                   
+                    var producteACistell = ProducteAcistellBuilder.build(
+                        _producte,
+                        _producte.variants[variantIndex].Color,
+                        talla.ToString(),
+                        quantitat,
+                        _producte.variants[variantIndex].Preu,
+                        iva_general
+                    );
+
                     var nouCistell = new Cistell
                     {
                         _id = ObjectId.GenerateNewId(),
-                        id_usuari = user.Id, 
+                        id_usuari = user.Id,
                         productes = new List<ProducteACistell> { producteACistell },
-                        preu_abans_IVA = producteACistell.preu_total,
-                        preu_total_IVA = producteACistell.preu_total * (iva_general / 100),
-                        preu_total_a_pagar = producteACistell.preu_total * (1 + (iva_general / 100))
+                        preu_abans_IVA = Math.Round(producteACistell.preu_total, 2),
+                        preu_total_IVA = Math.Round(producteACistell.preu_total * (iva_general / 100), 2),
+                        preu_total_a_pagar = Math.Round(producteACistell.preu_total * (1 + (iva_general / 100)), 2)
                     };
                     collectionCistell.InsertOne(nouCistell);
+                    cistell = nouCistell; 
                 }
                 else
                 {
-                    
-                    var update = Builders<Cistell>.Update
-                        .Push(c => c.productes, producteACistell);
+          
+                    cistell = cistellExistente;
 
-                    
-                    if (cistellExistente.preu_abans_IVA != null)
+                    var producteExistente = cistellExistente.productes.FirstOrDefault(p =>
+                        p.id_producte == _producte.Id &&
+                        p.variant == _producte.variants[variantIndex].Color &&
+                        p.talla == talla.ToString());
+
+                    if (producteExistente != null)
                     {
-                        update = update.Inc(c => c.preu_abans_IVA, producteACistell.preu_total);
-                        update = update.Inc(c => c.preu_total_IVA, producteACistell.preu_total * (iva_general / 100));
-                        update = update.Inc(c => c.preu_total_a_pagar, producteACistell.preu_total * (1 + (iva_general / 100)));
+               
+                        producteExistente.quantitat += quantitat;
+                        producteExistente.preu_total = Math.Round(producteExistente.preu_unitari * producteExistente.quantitat, 2);
+                        producteExistente.preu_IVA = Math.Round((producteExistente.preu_total * iva_general) / 100, 2);
+                        producteExistente.preu_final = Math.Round(producteExistente.preu_total - ((producteExistente.preu_total * producteExistente.descompte) / 100), 2);
+                        producteExistente.preu_total_IVA = Math.Round(producteExistente.preu_final + ((producteExistente.preu_final * iva_general) / 100), 2);
                     }
                     else
                     {
-                        
-                        update = update.Set(c => c.preu_abans_IVA, CalculPreusCistellHelper.CalculaPreuAbansIvaCistell(cistell.productes));
-                        update = update.Set(c => c.preu_total_IVA, CalculPreusCistellHelper.CalculaPreuTotalIvaCistell(cistell.productes));
-                        update = update.Set(c => c.preu_total_a_pagar, CalculPreusCistellHelper.CalculaPreuTotalCistell(cistell.productes));
+    
+                        var producteACistell = ProducteAcistellBuilder.build(
+                            _producte,
+                            _producte.variants[variantIndex].Color,
+                            talla.ToString(),
+                            quantitat,
+                            _producte.variants[variantIndex].Preu,
+                            iva_general
+                        );
+                        cistellExistente.productes.Add(producteACistell);
                     }
 
-                    collectionCistell.UpdateOne(filterCistell, update);
+                    cistellExistente.preu_abans_IVA = Math.Round(cistellExistente.productes.Sum(p => p.preu_total), 2);
+                    cistellExistente.preu_total_IVA = Math.Round(cistellExistente.productes.Sum(p => p.preu_IVA), 2);
+                    cistellExistente.preu_total_a_pagar = Math.Round(cistellExistente.productes.Sum(p => p.preu_total_IVA), 2);
+
+  
+                    var update = Builders<Cistell>.Update
+                        .Set(c => c.productes, cistellExistente.productes)
+                        .Set(c => c.preu_abans_IVA, cistellExistente.preu_abans_IVA)
+                        .Set(c => c.preu_total_IVA, cistellExistente.preu_total_IVA)
+                        .Set(c => c.preu_total_a_pagar, cistellExistente.preu_total_a_pagar);
+
+                    collectionCistell.UpdateOne(filterCistellUsuario, update);
                 }
 
                 MessageBox.Show("✅ Producto añadido al carrito");

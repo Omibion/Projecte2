@@ -36,6 +36,7 @@ namespace Projecte2.Views
             productes = getAllProducts(collection);
             numResults.SelectedIndex = 1;
             ItemsListView.ItemsSource = ProductPaginator.Paginator(1, resultsPerPage, productes);
+            BotoCarreto.Cistell = cistell;
         }
         public Principal(Usuari usuari, Cistell cistella)
         {
@@ -49,6 +50,7 @@ namespace Projecte2.Views
             productes = getAllProducts(collection);
             numResults.SelectedIndex = 1;
             ItemsListView.ItemsSource = ProductPaginator.Paginator(1, resultsPerPage, productes);
+            BotoCarreto.Cistell = cistell;
         }
 
         private void PageButton_Click(object sender, RoutedEventArgs e)
@@ -247,7 +249,6 @@ namespace Projecte2.Views
             cistell.id_usuari = user.Id; 
             cistell._id = ObjectId.GenerateNewId();
 
-            collection.InsertOne(cistell);
         }
     }
 }

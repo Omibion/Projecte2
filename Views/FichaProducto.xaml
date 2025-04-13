@@ -83,11 +83,13 @@
             </StackPanel>
             
         </Grid>
-        <Button Grid.Column="1" 
-            Content="Carretó" 
+        <local:BotoCarreto 
+            x:Name="BotoCarreto"
+            Grid.Column="1"
             Margin="5" 
             Padding="20,5"
             HorizontalAlignment="Right"
-            VerticalAlignment="Bottom"/>
+            VerticalAlignment="Bottom"
+            Cistell="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=cistell}"/>
     </Grid>
 </Window>

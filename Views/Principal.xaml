@@ -57,12 +57,14 @@
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
             </StackPanel>
-            <Button Grid.Column="1" 
-                    Content="Carretó" 
-                    Margin="10" 
-                    Padding="20,5"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Center"/>
+            <local:BotoCarreto 
+                x:Name="BotoCarreto"
+            Grid.Column="1"
+            Margin="5" 
+            Padding="20,5"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Bottom"
+            Cistell="{Binding cistell}"/>
         </Grid>
     </Grid>
 </Window>
