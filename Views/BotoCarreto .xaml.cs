@@ -45,8 +45,8 @@ namespace Projecte2.Views
             }
 
             // Abre la ventana del carrito con el Cistell pasado manualmente
-            //var carretoWindow = new CarretoView(Cistell);
-            //carretoWindow.Show();
+            var carretoWindow = new CarretoView(Cistell);
+            carretoWindow.Show();
         }
     }
 }

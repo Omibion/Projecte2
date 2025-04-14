@@ -1,0 +1,75 @@
+﻿<Window x:Class="Projecte2.Views.CarretoView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Projecte2.Views"
+        mc:Ignorable="d"
+        Title="El teu carretó" Height="600" Width="800">
+    <Grid Margin="15">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="0" Text="El teu carretó" FontSize="24" FontWeight="Bold" Margin="0,0,0,15"/>
+        <ListView Grid.Row="1" x:Name="LlistaProductes" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Border BorderBrush="#DDD" BorderThickness="0,0,0,1" Padding="0,5">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Image Source="{Binding ProducteFoto}" Width="80" Height="80" Grid.Column="0" Margin="0,0,15,0"/>
+                            <StackPanel Grid.Column="1">
+                                <TextBlock Text="{Binding ProducteNom}" FontWeight="Bold"/>
+                                <TextBlock Text="{Binding Variant}" Foreground="#666"/>
+                                <TextBlock Text="{Binding Talla}" Foreground="#666"/>
+                                <TextBlock Text="{Binding Quantitat, StringFormat='Quantitat: {0}'}" Foreground="#666"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="2" HorizontalAlignment="Right">
+                                <TextBlock Text="{Binding PreuTotal}" FontWeight="Bold"/>
+                                <Button Content="Eliminar"
+                                        Name="EliminarProducte"
+                                        Margin="0,5,0,0"
+                                        Padding="10,2"
+                                        Click="EliminarProducte_Click"  
+                                        Tag="{Binding id_producte}"/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <StackPanel Grid.Row="2" Margin="0,15,0,0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="1" HorizontalAlignment="Right">
+                    <TextBlock Text="{Binding TotalAbansIva, StringFormat='Subtotal: {0:C}'}" Margin="0,0,0,5"/>
+                    <TextBlock Text="{Binding TotalIva, StringFormat='IVA: {0:C}'}" Margin="0,0,0,5"/>
+                    <TextBlock Text="{Binding TotalPagar, StringFormat='Total a pagar: {0:C}'}" FontWeight="Bold" FontSize="16"/>
+                </StackPanel>
+            </Grid>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,15,0,0">
+                <Button Content="Tornar"
+                        Name="Tornar"
+                        Padding="20,5" 
+                        Margin="0,0,10,0"
+                        Click="Tornar_Click"/>
+                <Button Content="Pagar"
+                        Name="Pagar"
+                        Padding="20,5" 
+                        Background="#FF5C9E5D"
+                        Foreground="White"
+                        Click="Pagar_Click"/>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Window>

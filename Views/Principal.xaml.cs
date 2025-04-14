@@ -27,7 +27,8 @@ namespace Projecte2.Views
             user = usuari;
             IMongoDatabase database = client.GetDatabase("Botiga");
             IMongoCollection<Producte> collection = database.GetCollection<Producte>("Productes");
-            if(cistell.productes==null||cistell.productes.Count == 0)
+            IMongoCollection<Cistell> collectioncistell = database.GetCollection<Cistell>("Cistell");
+            if (cistell.productes==null||cistell.productes.Count == 0)
             {
                 ConstruirCistell(database, cistell);
             }
@@ -36,6 +37,7 @@ namespace Projecte2.Views
             productes = getAllProducts(collection);
             numResults.SelectedIndex = 1;
             ItemsListView.ItemsSource = ProductPaginator.Paginator(1, resultsPerPage, productes);
+            cistell = collectioncistell.Find(Builders<Cistell>.Filter.Eq("id_usuari", user.Id)).FirstOrDefault();
             BotoCarreto.Cistell = cistell;
         }
         public Principal(Usuari usuari, Cistell cistella)
@@ -234,7 +236,7 @@ namespace Projecte2.Views
             {
                 FichaProducto fichaProducto = new FichaProducto(productoSeleccionado,user,cistell);
                 fichaProducto.Show();
-                this.Hide();
+                this.Close();
                 ItemsListView.SelectedItem = null;
             }
         }

@@ -12,7 +12,8 @@ namespace Projecte2.Builders
         public static ProducteACistell build(Producte prod, string var, string talla, int quantitat, double preuUnitari, double IVA)
         {
             ProducteACistell producte = new ProducteACistell();
-            producte.id_producte = prod.Id;
+            var variant = prod.variants.FirstOrDefault(v => v.Color == var);
+            producte.id_producte = variant.Id;
             producte.variant = var;
             producte.talla = talla;
             producte.quantitat = quantitat;

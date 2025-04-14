@@ -90,6 +90,6 @@
             Padding="20,5"
             HorizontalAlignment="Right"
             VerticalAlignment="Bottom"
-            Cistell="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=cistell}"/>
+            Cistell="{Binding cistell}"/>
     </Grid>
 </Window>

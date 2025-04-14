@@ -41,6 +41,7 @@ namespace Projecte2.Views
             IMongoDatabase database = client.GetDatabase("Botiga");
             IMongoCollection<Producte> collection = database.GetCollection<Producte>("Productes");
             IMongoCollection<Iva> collectioniva = database.GetCollection<Iva>("IVA");
+            
             carregarIva();
             CarregarProductesEnVista(_producte);
             rellenarComboVariants(_producte);
@@ -62,7 +63,8 @@ namespace Projecte2.Views
                     StockTextBox.Text = producte.variants[VariantCmb.SelectedIndex].Talles.First(talla => talla.Numero == (int)CmbTallas.SelectedItem).Stock.ToString();
                 }
             };
-            BotoCarreto.Cistell = cistella;
+           
+            BotoCarreto.Cistell = cistell;
         }
 
         private double calculaPreuIva(double preu, double iva)
@@ -112,7 +114,7 @@ namespace Projecte2.Views
 
         private void Torna_Click(object sender, RoutedEventArgs e)
         {
-            Principal principal = Application.Current.Windows.OfType<Principal>().FirstOrDefault();
+            Principal principal = new Principal(user, cistell);
 
             if (principal != null)
             {
@@ -245,6 +247,7 @@ namespace Projecte2.Views
                         .Set(c => c.preu_abans_IVA, cistellExistente.preu_abans_IVA)
                         .Set(c => c.preu_total_IVA, cistellExistente.preu_total_IVA)
                         .Set(c => c.preu_total_a_pagar, cistellExistente.preu_total_a_pagar);
+                    cistell = cistellExistente;
 
                     collectionCistell.UpdateOne(filterCistellUsuario, update);
                 }
@@ -255,6 +258,7 @@ namespace Projecte2.Views
             {
                 MessageBox.Show($"❌ Error: {ex.Message}");
             }
+            BotoCarreto.Cistell = cistell;
         }
 
         private void Desastock_Click(object sender, RoutedEventArgs e)
