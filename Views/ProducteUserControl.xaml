@@ -5,10 +5,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Projecte2.Views"
              mc:Ignorable="d" 
-             d:DesignHeight="150" d:DesignWidth="90">
+             d:DesignHeight="180" d:DesignWidth="120">
 
     <UserControl.Resources>
-        <!-- Estilo para el contenedor de cada producto -->
         <Style x:Key="ProductCardStyle" TargetType="Border">
             <Setter Property="Background" Value="#F9F9F9"/>
             <Setter Property="BorderBrush" Value="#DDDDDD"/>
@@ -21,8 +20,6 @@
                     <DropShadowEffect Color="Black" Direction="270" ShadowDepth="3" Opacity="0.2" />
                 </Setter.Value>
             </Setter>
-
-            <!-- Cambio de color y efectos cuando el mouse pasa sobre el control -->
             <Style.Triggers>
                 <EventTrigger RoutedEvent="UIElement.MouseEnter">
                     <BeginStoryboard>
@@ -41,20 +38,23 @@
             </Style.Triggers>
         </Style>
     </UserControl.Resources>
-
-    <!-- Contenedor principal con un Border aplicado -->
     <Border Style="{StaticResource ProductCardStyle}">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-
-            <!-- Imagen del producto -->
             <Image Source="{Binding PrimeraFoto}" Width="80" Height="80" Margin="5" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="0"/>
-
-            <!-- Nombre del producto -->
-            <TextBlock Text="{Binding nom}" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10" Grid.Row="1" TextWrapping="Wrap" MaxWidth="120"/>
+            <TextBlock Text="{Binding nom}" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5" Grid.Row="1" TextWrapping="Wrap" MaxWidth="120"/>
+            <TextBlock Text="{Binding variants[0].Preu, StringFormat={}{0:C2}}" 
+                      FontSize="14" 
+                      FontWeight="Bold" 
+                      Foreground="#4CAF50"
+                      HorizontalAlignment="Center" 
+                      VerticalAlignment="Center" 
+                      Margin="5" 
+                      Grid.Row="2"/>
         </Grid>
     </Border>
 </UserControl>

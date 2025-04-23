@@ -219,7 +219,7 @@ namespace Projecte2.Views
                 calle,numero,pisoPuerta,ciudad,provincia,codigoPostal);
             FacturaBuilder.InsertarFactura(f);
             string jasperServerUrl = "http://localhost:8080/jasperserver";
-            string reportPath = "/jasperFactura/Invoice"; // Ruta de tu informe en el servidor
+            string reportPath = "/jasperFactura/Invoice"; 
             string username = "admin";
             string password = "admin";
 
@@ -230,13 +230,6 @@ namespace Projecte2.Views
            
                 string email = Txtmail.Text;
                 SendEmailWithAttachment(email, tempPdfPath, f.NumeroFactura.ToString());
-            
-            //aqui va todo lo del jasper y el correo
-
-            // EnviarFacturaPorEmail(f);
-            // MostrarFacturaEnJasper(f);
-            // MostrarFacturaEnPDF(f);
-
 
             IMongoCollection<Cistell> cistellCollection = database.GetCollection<Cistell>("Cistell");
             var filter = Builders<Cistell>.Filter.Eq("_id", _cistell._id);

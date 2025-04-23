@@ -51,8 +51,6 @@ namespace Projecte2.Views
                 MessageBox.Show("Error: No s'ha trobat el carretó.");
                 return;
             }
-
-            // Verificar si la cesta aún existe en la base de datos
             var client = new MongoClient("mongodb://localhost:27017");
             var database = client.GetDatabase("Botiga");
             var cistellCollection = database.GetCollection<Cistell>("Cistell");
@@ -70,8 +68,6 @@ namespace Projecte2.Views
                 MessageBox.Show("Error: No s'ha trobat l'usuari.");
                 return;
             }
-
-            // Abre la ventana del carrito con el Cistell y el Usuari
             var carretoWindow = new CarretoView(Cistell, Usuari);
             carretoWindow.Show();
         }

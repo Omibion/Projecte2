@@ -82,11 +82,11 @@ namespace Projecte2.Views
             ProductPrice.Text = calculaPreuIva(producte.variants[0].Preu,iva_general).ToString("C");
             StockTextBox.Text = producte.variants[0].Talles[0].Stock.ToString();
             CmbTallas.ItemsSource = producte.variants[0].Talles.Select(talla => talla.Numero).ToList();
-            CmbTallas.SelectedIndex = 0; // Selecciona la primera talla por defecto
-            //ProductImage1.Source = new BitmapImage(new Uri(producte.fotos[0], UriKind.RelativeOrAbsolute));
-            //ProductImage2.Source = new BitmapImage(new Uri(producte.fotos[1], UriKind.RelativeOrAbsolute));
-            //ProductImage3.Source = new BitmapImage(new Uri(producte.fotos[2], UriKind.RelativeOrAbsolute));
-            //ProductImage4.Source = new BitmapImage(new Uri(producte.fotos[3], UriKind.RelativeOrAbsolute));
+            CmbTallas.SelectedIndex = 0;
+            ProductImage1.Source = new BitmapImage(new Uri(producte.fotos[0], UriKind.RelativeOrAbsolute));
+            ProductImage2.Source = new BitmapImage(new Uri(producte.fotos[1], UriKind.RelativeOrAbsolute));
+            ProductImage3.Source = new BitmapImage(new Uri(producte.fotos[2], UriKind.RelativeOrAbsolute));
+            ProductImage4.Source = new BitmapImage(new Uri(producte.fotos[3], UriKind.RelativeOrAbsolute));
 
         }
         
@@ -282,5 +282,13 @@ namespace Projecte2.Views
             }
             
         }
+        private void Thumbnail_MouseEnter(object sender, MouseEventArgs e)
+        {
+            if (sender is Image thumbnail && thumbnail.Source != null)
+            {
+                ProductImage.Source = thumbnail.Source;
+            }
+        }
+
     }
 }

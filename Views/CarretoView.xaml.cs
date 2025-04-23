@@ -40,7 +40,7 @@ namespace Projecte2.Views
         private void CarregarProductes()
         {
             var database = _client.GetDatabase("Botiga");
-            var colProductes = database.GetCollection<BsonDocument>("Productes"); // Asegúrate del nombre
+            var colProductes = database.GetCollection<BsonDocument>("Productes");
 
             foreach (var p in _cistell.productes)
             {
@@ -162,7 +162,6 @@ namespace Projecte2.Views
                 var collection = database.GetCollection<Cistell>("Cistell");
                 collection.DeleteOne(c => c._id == _cistell._id);
 
-                // Resetear el carrito local
                 _cistell.productes.Clear();
                 _cistell.preu_abans_IVA = 0;
                 _cistell.preu_total_IVA = 0;

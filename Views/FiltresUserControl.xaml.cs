@@ -94,7 +94,6 @@ namespace Projecte2.Views
         {
             try
             {
-                // Verificar si hay un nuevo elemento seleccionado
                 if (e.NewValue is Categoria selectedCategory)
                 {
                     _selectedCategory = selectedCategory;

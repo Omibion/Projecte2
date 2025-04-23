@@ -9,7 +9,6 @@
         Title="FichaProducto" Height="450" Width="800">
 
     <Window.Resources>
-        <!-- Estilo de botones con Border para CornerRadius -->
         <Style x:Key="ButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="#4CAF50"/>
             <Setter Property="Foreground" Value="White"/>
@@ -23,8 +22,6 @@
             <Setter Property="BorderBrush" Value="#4CAF50"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Padding" Value="0"/>
-
-            <!-- Usamos un Border dentro del estilo para aplicar CornerRadius -->
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
@@ -39,16 +36,12 @@
                 </Setter.Value>
             </Setter>
         </Style>
-
-        <!-- Estilo para las imágenes de producto -->
         <Style x:Key="ProductImageStyle" TargetType="Image">
             <Setter Property="Stretch" Value="Uniform"/>
             <Setter Property="Margin" Value="5"/>
             <Setter Property="HorizontalAlignment" Value="Center"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
         </Style>
-
-        <!-- Estilo para el contenedor de imagen con bordes redondeados -->
         <Style x:Key="ImageContainerStyle" TargetType="Border">
             <Setter Property="Background" Value="#F9F9F9"/>
             <Setter Property="BorderBrush" Value="#DDDDDD"/>
@@ -64,30 +57,33 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <!-- Panel de imágenes -->
+        <!-- Columna izquierda con imagen principal y miniaturas -->
         <Grid Grid.Column="0">
-            <Border Style="{StaticResource ImageContainerStyle}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <Border Grid.Row="0" Style="{StaticResource ImageContainerStyle}">
                 <Image x:Name="ProductImage" Style="{StaticResource ProductImageStyle}"/>
             </Border>
+
             <Grid Grid.Row="1" Margin="0,10,0,0">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
-                <Image x:Name="ProductImage1" Style="{StaticResource ProductImageStyle}" Grid.Column="0"/>
-                <Image x:Name="ProductImage2" Style="{StaticResource ProductImageStyle}" Grid.Column="1"/>
-                <Image x:Name="ProductImage3" Style="{StaticResource ProductImageStyle}" Grid.Column="2"/>
-                <Image x:Name="ProductImage4" Style="{StaticResource ProductImageStyle}" Grid.Column="3"/>
+                <Image x:Name="ProductImage1" Style="{StaticResource ProductImageStyle}" Grid.Column="0" MouseEnter="Thumbnail_MouseEnter"/>
+                <Image x:Name="ProductImage2" Style="{StaticResource ProductImageStyle}" Grid.Column="1" MouseEnter="Thumbnail_MouseEnter"/>
+                <Image x:Name="ProductImage3" Style="{StaticResource ProductImageStyle}" Grid.Column="2" MouseEnter="Thumbnail_MouseEnter"/>
+                <Image x:Name="ProductImage4" Style="{StaticResource ProductImageStyle}" Grid.Column="3" MouseEnter="Thumbnail_MouseEnter"/>
             </Grid>
         </Grid>
 
-        <!-- Panel de información y controles -->
+        <!-- Columna derecha con detalles -->
         <Grid Grid.Column="1" Margin="10,0,0,0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -96,7 +92,6 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <!-- Botón de volver -->
             <Button x:Name="Torna" Content="Torna" HorizontalAlignment="Right" VerticalAlignment="Top" Click="Torna_Click" Style="{StaticResource ButtonStyle}" Grid.Row="0"/>
 
             <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
@@ -130,10 +125,8 @@
                 </StackPanel>
             </ScrollViewer>
 
-            <!-- Botón para agregar al carrito -->
             <Button x:Name="AddToCartButton" Content="Afegir al carretó" Click="AddToCartButton_Click" Style="{StaticResource ButtonStyle}" Grid.Row="2"/>
 
-            <!-- Control de stock -->
             <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10">
                 <TextBlock Text="Stock:" VerticalAlignment="Center" Margin="5"/>
                 <TextBox x:Name="StockTextBox" Width="50" Height="30" Margin="5" TextAlignment="Center"/>
@@ -141,7 +134,6 @@
             </StackPanel>
         </Grid>
 
-        <!-- Carrito -->
         <local:BotoCarreto 
             x:Name="BotoCarreto"
             Grid.Column="1"

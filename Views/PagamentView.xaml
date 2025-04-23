@@ -9,18 +9,12 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-
-        <!-- Título -->
         <TextBlock Grid.Row="0" Text="Finalizar Compra" FontSize="22" FontWeight="Bold" 
                   HorizontalAlignment="Center" Margin="0,0,0,20"/>
-
-        <!-- Contenido principal -->
         <TabControl Grid.Row="1">
-            <!-- Pestaña de Datos de Pago -->
             <TabItem Header="Datos de Pago">
                 <ScrollViewer>
                     <StackPanel Margin="10" Width="400">
-                        <!-- Tarjeta -->
                         <GroupBox Header="Datos de Tarjeta" Margin="0,0,0,15">
                             <StackPanel>
                                 <TextBlock Text="Número de Tarjeta:" Margin="0,5"/>
@@ -58,8 +52,6 @@
                     </StackPanel>
                 </ScrollViewer>
             </TabItem>
-
-            <!-- Pestaña de Envío -->
             <TabItem Header="Datos de Envío">
                 <ScrollViewer>
                     <StackPanel Margin="10" Width="400">
@@ -131,14 +123,12 @@
 
                     <TextBlock Text="Código Postal:" Grid.Row="5" Grid.Column="0" Margin="5"/>
                     <TextBox x:Name="TxtCodigoPostalFacturacion" Grid.Row="5" Grid.Column="1" Margin="5"/>
-                    
+
                     <TextBlock Text="e-mail:" Grid.Row="6" Grid.Column="0" Margin="5"/>
                     <TextBox x:Name="Txtmail" Grid.Row="6" Grid.Column="1" Margin="5"/>
                 </Grid>
             </TabItem>
         </TabControl>
-
-        <!-- Resumen de compra -->
         <Border Grid.Row="1" VerticalAlignment="Bottom" Margin="0,0,0,10" 
                 Background="#FFF5F5F5" Padding="10" CornerRadius="5">
             <StackPanel>
@@ -161,8 +151,6 @@
                 </StackPanel>
             </StackPanel>
         </Border>
-
-        <!-- Botones -->
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,15,0,0">
             <Button Content="Cancelar" Width="100" Margin="0,0,10,0" Click="BtnCancelar_Click"/>
             <Button Content="Pagar Ahora" Width="120" Background="#FF4CAF50" Foreground="White"

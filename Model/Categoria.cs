@@ -12,7 +12,6 @@ public class Categoria : INotifyPropertyChanged
     [BsonIgnore]
     public List<Categoria> Subcategories { get; set; } = new List<Categoria>();
 
-    // Añade aquí otras propiedades que necesites
     public string Descripcio { get; set; }
 
     public event PropertyChangedEventHandler PropertyChanged;
