@@ -102,7 +102,7 @@ namespace Projecte2.Views
                     {
                         Username = username,
                         PasswordEncriptada = hashedPassword,
-                        Direccions = new List<Direccio>() 
+                        direccio = new Direccio()
                     };
 
                     collection.InsertOne(newUser);

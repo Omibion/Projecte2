@@ -24,11 +24,15 @@ namespace Projecte2.Model
         public double preu_IVA { get; set; }
         public double preu_total_IVA { get; set; }  
         public double preu_final { get; set; }
+   
+        public string ProducteNom { get; set; }
+
+      
+        public string ProducteFoto { get; set; }
     }
 
-    public class Cistell : INotifyPropertyChanged
+    public class Cistell 
     {
-        // Propiedades SIN notificación (no necesitan binding con la UI)
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public ObjectId _id { get; set; }
@@ -37,81 +41,20 @@ namespace Projecte2.Model
         [BsonRepresentation(BsonType.ObjectId)]
         public ObjectId id_usuari { get; set; }
 
-        // Propiedades CON notificación (vinculadas a la UI)
-        private List<ProducteACistell> _productes = new List<ProducteACistell>();
-        private double? _preu_abans_IVA = 0;
-        private double? _preu_total_IVA = 0;
-        private double? _preu_total_a_pagar = 0;
-
         [BsonElement("productes")]
-        public List<ProducteACistell> productes
-        {
-            get => _productes;
-            set
-            {
-                if (_productes != value)
-                {
-                    _productes = value;
-                    OnPropertyChanged();
-                    RecalcularTotals(); 
-                }
-            }
-        }
+        public List<ProducteACistell>? productes { get; set; } = new List<ProducteACistell>();
 
         [BsonElement("preu_abans_IVA")]
-        public double? preu_abans_IVA
-        {
-            get => _preu_abans_IVA;
-            set
-            {
-                if (_preu_abans_IVA != value)
-                {
-                    _preu_abans_IVA = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
+        public double? preu_abans_IVA { get; set; } = 0;
 
         [BsonElement("preu_total_IVA")]
-        public double? preu_total_IVA
-        {
-            get => _preu_total_IVA;
-            set
-            {
-                if (_preu_total_IVA != value)
-                {
-                    _preu_total_IVA = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
+        public double? preu_total_IVA { get; set; } = 0;
 
         [BsonElement("preu_total_a_pagar")]
-        public double? preu_total_a_pagar
-        {
-            get => _preu_total_a_pagar;
-            set
-            {
-                if (_preu_total_a_pagar != value)
-                {
-                    _preu_total_a_pagar = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
+        public double? preu_total_a_pagar { get; set; } = 0;
 
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        public void RecalcularTotals()
-        {
-            preu_abans_IVA = productes?.Sum(p => p.preu_total) ?? 0;
-            preu_total_IVA = productes?.Sum(p => p.preu_IVA) ?? 0;
-            preu_total_a_pagar = productes?.Sum(p => p.preu_total_IVA) ?? 0;
-        }
+    
+        
     }
+   
 }

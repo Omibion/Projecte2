@@ -1,4 +1,5 @@
-﻿using Projecte2.Model;
+﻿using MongoDB.Driver;
+using Projecte2.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,6 +31,13 @@ namespace Projecte2.Views
             get => (Cistell)GetValue(CistellProperty);
             set => SetValue(CistellProperty, value);
         }
+        public static readonly DependencyProperty UsuariProperty =
+                    DependencyProperty.Register("Usuari", typeof(Usuari), typeof(BotoCarreto));
+        public Usuari Usuari
+        {
+            get => (Usuari)GetValue(UsuariProperty);
+            set => SetValue(UsuariProperty, value);
+        }
 
         public BotoCarreto()
         {
@@ -44,9 +52,30 @@ namespace Projecte2.Views
                 return;
             }
 
-            // Abre la ventana del carrito con el Cistell pasado manualmente
-            var carretoWindow = new CarretoView(Cistell);
+            // Verificar si la cesta aún existe en la base de datos
+            var client = new MongoClient("mongodb://localhost:27017");
+            var database = client.GetDatabase("Botiga");
+            var cistellCollection = database.GetCollection<Cistell>("Cistell");
+            var filter = Builders<Cistell>.Filter.Eq("_id", Cistell._id);
+            var cistellExistente = cistellCollection.Find(filter).FirstOrDefault();
+
+            if (cistellExistente == null)
+            {
+                MessageBox.Show("Error: No s'ha trobat el carretó.");
+                return;
+            }
+
+            if (Usuari == null)
+            {
+                MessageBox.Show("Error: No s'ha trobat l'usuari.");
+                return;
+            }
+
+            // Abre la ventana del carrito con el Cistell y el Usuari
+            var carretoWindow = new CarretoView(Cistell, Usuari);
             carretoWindow.Show();
         }
+
+
     }
 }

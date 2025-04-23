@@ -39,6 +39,7 @@ namespace Projecte2.Views
             ItemsListView.ItemsSource = ProductPaginator.Paginator(1, resultsPerPage, productes);
             cistell = collectioncistell.Find(Builders<Cistell>.Filter.Eq("id_usuari", user.Id)).FirstOrDefault();
             BotoCarreto.Cistell = cistell;
+            BotoCarreto.Usuari = user;
         }
         public Principal(Usuari usuari, Cistell cistella)
         {
@@ -53,6 +54,7 @@ namespace Projecte2.Views
             numResults.SelectedIndex = 1;
             ItemsListView.ItemsSource = ProductPaginator.Paginator(1, resultsPerPage, productes);
             BotoCarreto.Cistell = cistell;
+            BotoCarreto.Usuari = user;
         }
 
         private void PageButton_Click(object sender, RoutedEventArgs e)

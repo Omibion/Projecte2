@@ -26,10 +26,16 @@
                             <Image Source="{Binding ProducteFoto}" Width="80" Height="80" Grid.Column="0" Margin="0,0,15,0"/>
                             <StackPanel Grid.Column="1">
                                 <TextBlock Text="{Binding ProducteNom}" FontWeight="Bold"/>
-                                <TextBlock Text="{Binding Variant}" Foreground="#666"/>
-                                <TextBlock Text="{Binding Talla}" Foreground="#666"/>
-                                <TextBlock Text="{Binding Quantitat, StringFormat='Quantitat: {0}'}" Foreground="#666"/>
+                                <TextBlock Text="{Binding variant, StringFormat='Variant: {0}'}" Foreground="#666"/>
+                                <TextBlock Text="{Binding talla, StringFormat='Talla: {0}'}" Foreground="#666"/>
+                                <TextBlock Text="{Binding quantitat, StringFormat='Quantitat: {0}'}" Foreground="#666"/>
+                                <TextBlock Text="{Binding preu_unitari, StringFormat='Preu unitari: {0:C2}'}" Foreground="#666"/>
+                                <TextBlock Text="{Binding descompte, StringFormat='Descompte: {0:P0}'}" Foreground="#666"/>
+                                <TextBlock Text="{Binding preu_total, StringFormat='Preu total sense IVA: {0:C2}'}" Foreground="#666"/>
+                                <TextBlock Text="{Binding preu_IVA, StringFormat='IVA: {0:C2}'}" Foreground="#666"/>
+                                <TextBlock Text="{Binding preu_total_IVA, StringFormat='Total amb IVA: {0:C2}'}" Foreground="#666" FontWeight="Bold"/>
                             </StackPanel>
+
                             <StackPanel Grid.Column="2" HorizontalAlignment="Right">
                                 <TextBlock Text="{Binding PreuTotal}" FontWeight="Bold"/>
                                 <Button Content="Eliminar"
@@ -52,9 +58,19 @@
                 </Grid.ColumnDefinitions>
 
                 <StackPanel Grid.Column="1" HorizontalAlignment="Right">
-                    <TextBlock Text="{Binding TotalAbansIva, StringFormat='Subtotal: {0:C}'}" Margin="0,0,0,5"/>
-                    <TextBlock Text="{Binding TotalIva, StringFormat='IVA: {0:C}'}" Margin="0,0,0,5"/>
-                    <TextBlock Text="{Binding TotalPagar, StringFormat='Total a pagar: {0:C}'}" FontWeight="Bold" FontSize="16"/>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Subtotal:" FontWeight="Bold" Margin="0,0,10,0"/>
+                        <TextBlock x:Name="txtTotalSinIVA" Margin="0,0,0,5"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="IVA:" FontWeight="Bold" Margin="0,0,10,0"/>
+                        <TextBlock x:Name="txtTotalIva" Margin="0,0,0,5"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Total:" FontWeight="Bold" Margin="0,0,10,0"/>
+                        <TextBlock x:Name="txtTotalPagar" FontWeight="Bold" FontSize="16"/>
+                    </StackPanel>
+                    
                 </StackPanel>
             </Grid>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,15,0,0">

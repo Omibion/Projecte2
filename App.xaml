@@ -4,6 +4,6 @@
              xmlns:local="clr-namespace:Projecte2"
              StartupUri="Views/Loggin.xaml">
     <Application.Resources>
-         
+        
     </Application.Resources>
 </Application>

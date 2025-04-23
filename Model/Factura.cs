@@ -15,7 +15,10 @@ namespace Projecte2.Model
     public class Factura
     {
         [BsonId] 
-        public ObjectId Id { get; set; } 
+        public ObjectId Id { get; set; }
+
+        [BsonElement("numero_factura")]
+        public int NumeroFactura { get; set; }
 
         [BsonElement("data")]
         public DateTime data { get; set; } 
@@ -24,16 +27,16 @@ namespace Projecte2.Model
         public Usuari datosCliente { get; set; }  
 
         [BsonElement("linies")]
-        public List<LiniaFactura> linies { get; set; } 
+        public List<ProducteACistell> linies { get; set; } 
 
         [BsonElement("preu_abans_IVA")]
-        public decimal preuAbansIVA { get; set; } 
+        public double preuAbansIVA { get; set; } 
 
         [BsonElement("preu_total_IVA")]
-        public decimal preuTotalIVA { get; set; } 
+        public double preuTotalIVA { get; set; } 
 
         [BsonElement("preu_total_a_pagar")]
-        public decimal preuTotalAPagar { get; set; }  
+        public double preuTotalAPagar { get; set; }  
         [BsonElement("dades_fiscals")]
         public DadesFiscals dadesFiscals { get; set; }  
     public class LiniaFactura
@@ -87,7 +90,7 @@ public class DadesFiscals
         [BsonElement("codi_postal")]
         public string codiPostal { get; set; } 
 
-        [BsonElement("poblacio")]
+        [BsonElement("població")]
         public string poblacio { get; set; } 
 
         [BsonElement("carrer")]
@@ -96,10 +99,10 @@ public class DadesFiscals
         [BsonElement("CIF")]
         public string CIF { get; set; }  
 
-        [BsonElement("email")]
+        [BsonElement("e-mail")]
         public string email { get; set; }  
 
-        [BsonElement("telefon")]
+        [BsonElement("telèfon")]
         public string telefon { get; set; } 
     }
 

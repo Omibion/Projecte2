@@ -24,27 +24,40 @@ namespace Projecte2.Views
     {
         private readonly Cistell _cistell;
         private readonly MongoClient _client = new MongoClient("mongodb://localhost:27017");
-
-        // Propiedades para el binding
         public double TotalAbansIva => (double)_cistell.preu_abans_IVA;
         public double TotalIva => (double)_cistell.preu_total_IVA;
         public double TotalPagar => (double)_cistell.preu_total_a_pagar;
-
-        public CarretoView(Cistell cistell)
+        private readonly Usuari _usuari;
+        public CarretoView(Cistell cistell,Usuari usu)
         {
             InitializeComponent();
             _cistell = cistell;
-            DataContext = this; // Establecer el DataContext para los bindings
+            _usuari = usu;
+            DataContext = this; 
             CarregarProductes();
+            MostrarPreus(_cistell);
         }
-
-
-
         private void CarregarProductes()
         {
-           
+            var database = _client.GetDatabase("Botiga");
+            var colProductes = database.GetCollection<BsonDocument>("Productes"); // Asegúrate del nombre
+
+            foreach (var p in _cistell.productes)
+            {
+                var filtre = Builders<BsonDocument>.Filter.Eq("_id", p.id_producte);
+                var doc = colProductes.Find(filtre).FirstOrDefault();
+
+                if (doc != null)
+                {
+                    p.ProducteNom = doc.GetValue("ProducteNom", "").AsString;
+                    p.ProducteFoto = doc.GetValue("ProducteFoto", "").AsString; 
+                }
+               
+            }
+
             LlistaProductes.ItemsSource = _cistell.productes;
         }
+
 
         private void ActualitzarCistell()
         {
@@ -56,21 +69,34 @@ namespace Projecte2.Views
         {
             try
             {
-                // 1. Validar que el sender es un botón
                 if (!(sender is Button button))
                 {
                     MessageBox.Show("Error: Acción inválida");
                     return;
                 }
 
-                // 2. Obtener el producto directamente del DataContext (más limpio que usar Tag)
-                if (!(button.DataContext is ProducteACistell producte))
+                if (button.Tag == null)
                 {
                     MessageBox.Show("Error: No se pudo identificar el producto");
                     return;
                 }
 
-                // 3. Confirmar con el usuario
+                ObjectId producteId;
+
+                if (button.Tag is ObjectId)
+                {
+                    producteId = (ObjectId)button.Tag;
+                }
+                else if (button.Tag is string idString && ObjectId.TryParse(idString, out var parsedId))
+                {
+                    producteId = parsedId;
+                }
+                else
+                {
+                    MessageBox.Show("Error: Formato de ID incorrecto");
+                    return;
+                }
+
                 if (MessageBox.Show("¿Seguro que quieres eliminar este producto del carrito?",
                                   "Confirmar eliminación",
                                   MessageBoxButton.YesNo) != MessageBoxResult.Yes)
@@ -78,38 +104,54 @@ namespace Projecte2.Views
                     return;
                 }
 
-                // 4. Validar que el carrito existe
                 if (_cistell == null)
                 {
                     MessageBox.Show("Error: Carrito no disponible");
                     return;
                 }
 
-                // 5. Eliminar el producto (ya no necesitamos buscar por ID)
-                bool eliminado = _cistell.productes.Remove(producte);
+                if (_cistell.productes == null || !_cistell.productes.Any())
+                {
+                    MessageBox.Show("El carrito está vacío");
+                    return;
+                }
 
-                if (!eliminado)
+                var productesEliminats = _cistell.productes.RemoveAll(p => p.id_producte == producteId);
+
+                if (productesEliminats == 0)
                 {
                     MessageBox.Show("Producto no encontrado en el carrito");
                     return;
                 }
 
-                // 6. Actualizar en base de datos
+
+                RecalcularTotals(_cistell);
+
                 ActualitzarCistellMongoDB();
 
-                // 7. No necesitamos llamar a RecalcularTotals() ni ActualitzarCistell()
-                // porque:
-                // - El setter de productes ya llama a RecalcularTotals()
-                // - INotifyPropertyChanged actualiza automáticamente los bindings
+                ActualitzarCistell();
+                
+               MostrarPreus(_cistell);
 
-                // 8. Mostrar confirmación
                 MessageBox.Show("Producto eliminado correctamente");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error al eliminar producto: {ex}");
+                Console.WriteLine($"Error al eliminar producto: {ex.ToString()}");
+
                 MessageBox.Show($"Error inesperado: {ex.Message}");
             }
+        }
+
+       public void MostrarPreus(Cistell cistell)
+        {
+            txtTotalIva.Text = null;
+            txtTotalSinIVA.Text = null;
+            txtTotalPagar.Text = null;
+
+            txtTotalIva.Text = cistell.preu_total_IVA.ToString();
+            txtTotalSinIVA.Text = cistell.preu_abans_IVA.ToString();
+            txtTotalPagar.Text = cistell.preu_total_a_pagar.ToString();
         }
 
         private void EliminarCistellCompletament()
@@ -131,7 +173,12 @@ namespace Projecte2.Views
                 MessageBox.Show($"Error al eliminar carrito: {ex.Message}");
             }
         }
-
+        public void RecalcularTotals(Cistell cistell)
+        {
+            cistell.preu_abans_IVA = cistell.productes?.Sum(p => p.preu_total) ?? 0;
+            cistell.preu_total_IVA = cistell.productes?.Sum(p => p.preu_IVA) ?? 0;
+            cistell.preu_total_a_pagar = cistell.productes?.Sum(p => p.preu_total_IVA) ?? 0;
+        }
        
 
         private void ActualitzarCistellMongoDB()
@@ -155,19 +202,18 @@ namespace Projecte2.Views
 
         private void Pagar_Click(object sender, RoutedEventArgs e)
         {
-            if (!_cistell.productes.Any())
+            if (_cistell.productes.Count<1)
             {
                 MessageBox.Show("El carretó està buit. Afegeix productes abans de pagar.");
                 return;
             }
 
-            // Aquí iría la lógica para abrir la ventana de pago
             MessageBox.Show("Redirigint a la pàgina de pagament...");
-            // new PagamentView(_cistell).Show();
+            PagamentView _pagamentView = new PagamentView(_cistell,_usuari);
+            _pagamentView.Show();
             this.Close();
         }
 
-        // Método para notificar cambios en las propiedades (necesario para los bindings)
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string propertyName)
         {

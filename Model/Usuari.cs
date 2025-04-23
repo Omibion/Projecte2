@@ -23,25 +23,34 @@ namespace Projecte2.Model
         public string PasswordEncriptada { get; set; } 
 
         [BsonElement("direccions")]
-        public List<Direccio>? Direccions { get; set; } 
+        public Direccio direccio { get; set; }
+
+        [BsonElement("direccio_facturacio")]
+        public Direccio direccioFacturacio { get; set; }
     }
 
     public class Direccio
     {
         [BsonElement("pais")]
-        public string pais { get; set; } 
+        public string pais { get; set; }
 
         [BsonElement("provincia")]
-        public string provincia { get; set; }  
+        public string provincia { get; set; }
 
         [BsonElement("codi_postal")]
-        public string codiPostal { get; set; }  
+        public string codiPostal { get; set; }
 
         [BsonElement("poblacio")]
-        public string poblacio { get; set; } 
+        public string poblacio { get; set; }
 
         [BsonElement("carrer")]
-        public string carrer { get; set; } 
+        public string carrer { get; set; }
+
+        [BsonElement("número")]
+        public string numero { get; set; }
+        [BsonElement("pis_porta")]
+        public string? pisPorta { get; set;}
+
     }
 
 }

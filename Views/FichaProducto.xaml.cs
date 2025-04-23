@@ -65,6 +65,7 @@ namespace Projecte2.Views
             };
            
             BotoCarreto.Cistell = cistell;
+            BotoCarreto.Usuari = user;
         }
 
         private double calculaPreuIva(double preu, double iva)
@@ -208,11 +209,15 @@ namespace Projecte2.Views
                 {
           
                     cistell = cistellExistente;
-
-                    var producteExistente = cistellExistente.productes.FirstOrDefault(p =>
-                        p.id_producte == _producte.Id &&
-                        p.variant == _producte.variants[variantIndex].Color &&
-                        p.talla == talla.ToString());
+                    ProducteACistell producteExistente = null;
+                    foreach (var producte in cistell.productes)
+                    {
+                        if (producte.id_producte == _producte.variants[variantIndex].Id && producte.talla == talla.ToString())
+                        {
+                            producteExistente = producte;
+                            break;
+                        }
+                    }
 
                     if (producteExistente != null)
                     {

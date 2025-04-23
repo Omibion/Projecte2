@@ -1,0 +1,172 @@
+﻿<Window x:Class="Projecte2.Views.PagamentView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Finalizar Compra" Height="700" Width="900"
+        WindowStartupLocation="CenterScreen">
+    <Grid Margin="15">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Título -->
+        <TextBlock Grid.Row="0" Text="Finalizar Compra" FontSize="22" FontWeight="Bold" 
+                  HorizontalAlignment="Center" Margin="0,0,0,20"/>
+
+        <!-- Contenido principal -->
+        <TabControl Grid.Row="1">
+            <!-- Pestaña de Datos de Pago -->
+            <TabItem Header="Datos de Pago">
+                <ScrollViewer>
+                    <StackPanel Margin="10" Width="400">
+                        <!-- Tarjeta -->
+                        <GroupBox Header="Datos de Tarjeta" Margin="0,0,0,15">
+                            <StackPanel>
+                                <TextBlock Text="Número de Tarjeta:" Margin="0,5"/>
+                                <TextBox x:Name="TxtNumeroTarjeta" Margin="0,0,0,10" 
+                                        Tag="Ej: 1234 5678 9012 3456" 
+                                        PreviewTextInput="NumeroTarjeta_PreviewTextInput"/>
+
+                                <Grid Margin="0,0,0,10">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Grid.Column="0">
+                                        <TextBlock Text="Mes Caducidad:" Margin="0,5"/>
+                                        <TextBox x:Name="TxtMesCaducidad" MaxLength="2" Tag="MM"
+                                                PreviewTextInput="Numero_PreviewTextInput"/>
+                                    </StackPanel>
+                                    <StackPanel Grid.Column="1" Margin="10,0,10,0">
+                                        <TextBlock Text="Año Caducidad:" Margin="0,5"/>
+                                        <TextBox x:Name="TxtAnoCaducidad" MaxLength="2" Tag="AA"
+                                                PreviewTextInput="Numero_PreviewTextInput"/>
+                                    </StackPanel>
+                                    <StackPanel Grid.Column="2">
+                                        <TextBlock Text="CVV:" Margin="0,5"/>
+                                        <TextBox x:Name="TxtCVV" MaxLength="3"
+                                                PreviewTextInput="Numero_PreviewTextInput"/>
+                                    </StackPanel>
+                                </Grid>
+
+                                <TextBlock Text="Nombre del Titular:" Margin="0,5"/>
+                                <TextBox x:Name="TxtNombreTitular"/>
+                            </StackPanel>
+                        </GroupBox>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+            <!-- Pestaña de Envío -->
+            <TabItem Header="Datos de Envío">
+                <ScrollViewer>
+                    <StackPanel Margin="10" Width="400">
+                        <GroupBox Header="Método de Envío">
+                            <StackPanel>
+                                <TextBlock Text="Tipo de Envío:" Margin="0,5"/>
+                                <ComboBox x:Name="CmbTipoEnvio" DisplayMemberPath="nom" 
+                                         SelectedValuePath="preu_base"
+                                         SelectionChanged="CmbTipoEnvio_SelectionChanged"
+                                         Margin="0,0,0,15" Height="30"/>
+
+                                <StackPanel x:Name="PanelDireccion" Visibility="Collapsed">
+                                    <TextBlock Text="Dirección de Envío" FontWeight="Bold" Margin="0,10,0,5"/>
+
+                                    <TextBlock Text="Calle:" Margin="0,5"/>
+                                    <TextBox x:Name="TxtCalle" Margin="0,0,0,10"/>
+
+                                    <TextBlock Text="Número:" Margin="0,5"/>
+                                    <TextBox x:Name="TxtNumero" Margin="0,0,0,10"/>
+
+                                    <TextBlock Text="Piso/Puerta (opcional):" Margin="0,5"/>
+                                    <TextBox x:Name="TxtPisoPuerta" Margin="0,0,0,10"/>
+
+                                    <TextBlock Text="Ciudad:" Margin="0,5"/>
+                                    <TextBox x:Name="TxtCiudad" Margin="0,0,0,10"/>
+
+                                    <TextBlock Text="Código Postal:" Margin="0,5"/>
+                                    <TextBox x:Name="TxtCodigoPostal" Margin="0,0,0,10"/>
+
+                                    <TextBlock Text="Provincia:" Margin="0,5"/>
+                                    <TextBox x:Name="TxtProvincia"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </GroupBox>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+            <TabItem Header="Dirección de Facturación" Height="20" VerticalAlignment="Top">
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Text="Calle:" Grid.Row="0" Grid.Column="0" Margin="5"/>
+                    <TextBox x:Name="TxtCalleFacturacion" Grid.Row="0" Grid.Column="1" Margin="5"/>
+
+                    <TextBlock Text="Número:" Grid.Row="1" Grid.Column="0" Margin="5"/>
+                    <TextBox x:Name="TxtNumeroFacturacion" Grid.Row="1" Grid.Column="1" Margin="5"/>
+
+                    <TextBlock Text="Piso/Puerta:" Grid.Row="2" Grid.Column="0" Margin="5"/>
+                    <TextBox x:Name="TxtPisoPuertaFacturacion" Grid.Row="2" Grid.Column="1" Margin="5"/>
+
+                    <TextBlock Text="Ciudad:" Grid.Row="3" Grid.Column="0" Margin="5"/>
+                    <TextBox x:Name="TxtCiudadFacturacion" Grid.Row="3" Grid.Column="1" Margin="5"/>
+
+                    <TextBlock Text="Provincia:" Grid.Row="4" Grid.Column="0" Margin="5"/>
+                    <TextBox x:Name="TxtProvinciaFacturacion" Grid.Row="4" Grid.Column="1" Margin="5"/>
+
+                    <TextBlock Text="Código Postal:" Grid.Row="5" Grid.Column="0" Margin="5"/>
+                    <TextBox x:Name="TxtCodigoPostalFacturacion" Grid.Row="5" Grid.Column="1" Margin="5"/>
+                    
+                    <TextBlock Text="e-mail:" Grid.Row="6" Grid.Column="0" Margin="5"/>
+                    <TextBox x:Name="Txtmail" Grid.Row="6" Grid.Column="1" Margin="5"/>
+                </Grid>
+            </TabItem>
+        </TabControl>
+
+        <!-- Resumen de compra -->
+        <Border Grid.Row="1" VerticalAlignment="Bottom" Margin="0,0,0,10" 
+                Background="#FFF5F5F5" Padding="10" CornerRadius="5">
+            <StackPanel>
+                <TextBlock Text="Resumen de compra" FontWeight="Bold" FontSize="16" Margin="0,0,0,5"/>
+
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Subtotal:" Width="150"/>
+                    <TextBlock Text="{Binding Subtotal, StringFormat={}{0:C2}}"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Coste de envío:" Width="150"/>
+                    <TextBlock Text="{Binding CosteEnvio, StringFormat={}{0:C2}}"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                    <TextBlock Text="TOTAL:" FontWeight="Bold" Width="150"/>
+                    <TextBlock Text="{Binding TotalFinal, StringFormat={}{0:C2}}" 
+                              FontWeight="Bold" FontSize="14"/>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+
+        <!-- Botones -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,15,0,0">
+            <Button Content="Cancelar" Width="100" Margin="0,0,10,0" Click="BtnCancelar_Click"/>
+            <Button Content="Pagar Ahora" Width="120" Background="#FF4CAF50" Foreground="White"
+                   Click="BtnPagar_Click" FontWeight="Bold"/>
+        </StackPanel>
+    </Grid>
+</Window>

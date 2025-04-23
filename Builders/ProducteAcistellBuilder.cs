@@ -1,4 +1,5 @@
-﻿using Projecte2.Model;
+﻿using MongoDB.Bson;
+using Projecte2.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,9 @@ namespace Projecte2.Builders
         {
             ProducteACistell producte = new ProducteACistell();
             var variant = prod.variants.FirstOrDefault(v => v.Color == var);
-            producte.id_producte = variant.Id;
+            producte.id_producte = variant.Talles.FirstOrDefault(t => t.Numero == int.Parse(talla))?.Id ?? ObjectId.Empty;
+            producte.ProducteNom = prod.nom;
+            producte.ProducteFoto = prod.PrimeraFoto;
             producte.variant = var;
             producte.talla = talla;
             producte.quantitat = quantitat;

@@ -6,44 +6,102 @@
         xmlns:local="clr-namespace:Projecte2.Views"
         mc:Ignorable="d"
         Title="Principal" Height="450" Width="800"
-        WindowState="Maximized">
+        WindowState="Maximized" Background="#f5f5f5">
+
+    <Window.Resources>
+        <!-- Estilo para los botones con bordes redondeados -->
+        <Style x:Key="ButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#4CAF50"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="10">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Estilo para los controles de ComboBox -->
+        <Style x:Key="ComboBoxStyle" TargetType="ComboBox">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="Background" Value="#ffffff"/>
+            <Setter Property="BorderBrush" Value="#cccccc"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+
+        <!-- Estilo para ListView -->
+        <Style x:Key="ListViewStyle" TargetType="ListView">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#cccccc"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Margin" Value="10"/>
+        </Style>
+    </Window.Resources>
+
     <Grid>
+        <!-- Fila de filtros y botones -->
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
+
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
+
+            <!-- Filtros -->
             <local:FiltresUserControl Grid.Column="0" x:Name="FiltresControl" Margin="10" HorizontalAlignment="Center"/>
+
+            <!-- Botones Filtrar y Netejar -->
             <StackPanel Grid.Column="1" Orientation="Vertical" Margin="10">
-                <Button Content="Filtrar" Click="Filtre_Button_Click" Margin="10" HorizontalAlignment="Right"/>
-                <Button Content="Netejar" Click="Netejar_Button_Click" Margin="10" HorizontalAlignment="Right"/>
+                <Button Content="Filtrar" Style="{StaticResource ButtonStyle}" Click="Filtre_Button_Click"/>
+                <Button Content="Netejar" Style="{StaticResource ButtonStyle}" Click="Netejar_Button_Click"/>
             </StackPanel>
         </Grid>
-        <ListView x:Name="ItemsListView" Grid.Row="1" SelectionChanged="ItemsListView_SelectionChanged">
+
+        <!-- Lista de Productos -->
+        <ListView x:Name="ItemsListView" Grid.Row="1" SelectionChanged="ItemsListView_SelectionChanged" Style="{StaticResource ListViewStyle}">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <local:ProducteUserControl/>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
+
+        <!-- Fila de paginación y opciones -->
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
+
+            <!-- Opciones de número de resultados -->
             <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
-                <ComboBox x:Name="numResults" Width="60" Margin="0,0,10,0" SelectionChanged="NumResults_SelectionChanged">
+                <ComboBox x:Name="numResults" Width="60" Margin="0,0,10,0" SelectionChanged="NumResults_SelectionChanged" Style="{StaticResource ComboBoxStyle}">
                     <ComboBoxItem Content="5" />
                     <ComboBoxItem Content="10" />
                     <ComboBoxItem Content="15" />
                     <ComboBoxItem Content="20" />
                     <ComboBoxItem Content="25" />
                 </ComboBox>
+
+                <!-- Controles de Paginación -->
                 <ItemsControl x:Name="PaginationControl" ItemsSource="{Binding PageNumbers}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
@@ -52,19 +110,14 @@
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Button Content="{Binding}" Click="PageButton_Click" Margin="2" />
+                            <Button Content="{Binding}" Click="PageButton_Click" Margin="2" Style="{StaticResource ButtonStyle}"/>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
             </StackPanel>
-            <local:BotoCarreto 
-                x:Name="BotoCarreto"
-            Grid.Column="1"
-            Margin="5" 
-            Padding="20,5"
-            HorizontalAlignment="Right"
-            VerticalAlignment="Bottom"
-            Cistell="{Binding cistell}"/>
+
+            <!-- Carrito de Compras -->
+            <local:BotoCarreto x:Name="BotoCarreto" Grid.Column="1" Margin="5" Padding="20,5" HorizontalAlignment="Right" VerticalAlignment="Bottom" Cistell="{Binding cistell}" Usuari="{Binding user}"/>
         </Grid>
     </Grid>
 </Window>

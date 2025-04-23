@@ -7,13 +7,68 @@
         mc:Ignorable="d"
         WindowStyle="None"
         Title="FichaProducto" Height="450" Width="800">
+
+    <Window.Resources>
+        <!-- Estilo de botones con Border para CornerRadius -->
+        <Style x:Key="ButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#4CAF50"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Width" Value="200"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="BorderBrush" Value="#4CAF50"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="0"/>
+
+            <!-- Usamos un Border dentro del estilo para aplicar CornerRadius -->
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="15">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Estilo para las imágenes de producto -->
+        <Style x:Key="ProductImageStyle" TargetType="Image">
+            <Setter Property="Stretch" Value="Uniform"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+
+        <!-- Estilo para el contenedor de imagen con bordes redondeados -->
+        <Style x:Key="ImageContainerStyle" TargetType="Border">
+            <Setter Property="Background" Value="#F9F9F9"/>
+            <Setter Property="BorderBrush" Value="#DDDDDD"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="Padding" Value="5"/>
+        </Style>
+    </Window.Resources>
+
     <Grid Margin="20">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
+
+        <!-- Panel de imágenes -->
         <Grid Grid.Column="0">
-            <Image x:Name="ProductImage" Stretch="Uniform" />
+            <Border Style="{StaticResource ImageContainerStyle}">
+                <Image x:Name="ProductImage" Style="{StaticResource ProductImageStyle}"/>
+            </Border>
             <Grid Grid.Row="1" Margin="0,10,0,0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -24,12 +79,15 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <Image x:Name="ProductImage1" Grid.Column="0" Stretch="Uniform" Margin="5"/>
-                <Image x:Name="ProductImage2" Grid.Column="1" Stretch="Uniform" Margin="5"/>
-                <Image x:Name="ProductImage3" Grid.Column="2" Stretch="Uniform" Margin="5"/>
-                <Image x:Name="ProductImage4" Grid.Column="3" Stretch="Uniform" Margin="5"/>
+
+                <Image x:Name="ProductImage1" Style="{StaticResource ProductImageStyle}" Grid.Column="0"/>
+                <Image x:Name="ProductImage2" Style="{StaticResource ProductImageStyle}" Grid.Column="1"/>
+                <Image x:Name="ProductImage3" Style="{StaticResource ProductImageStyle}" Grid.Column="2"/>
+                <Image x:Name="ProductImage4" Style="{StaticResource ProductImageStyle}" Grid.Column="3"/>
             </Grid>
         </Grid>
+
+        <!-- Panel de información y controles -->
         <Grid Grid.Column="1" Margin="10,0,0,0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -37,25 +95,23 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <Button x:Name="Torna" Content="Torna" HorizontalAlignment="Right" VerticalAlignment="Top" Click="Torna_Click" Grid.Row="0"/>
+
+            <!-- Botón de volver -->
+            <Button x:Name="Torna" Content="Torna" HorizontalAlignment="Right" VerticalAlignment="Top" Click="Torna_Click" Style="{StaticResource ButtonStyle}" Grid.Row="0"/>
+
             <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
                 <StackPanel>
-                    <TextBlock x:Name="ProductName" FontSize="24" FontWeight="Bold" Margin="0,10" 
-                               HorizontalAlignment="Center" TextWrapping="Wrap"/>
-                    <TextBlock x:Name="ProductDescription" FontSize="16" Margin="0,10" 
-                               HorizontalAlignment="Center" TextWrapping="Wrap"/>
+                    <TextBlock x:Name="ProductName" FontSize="24" FontWeight="Bold" Margin="0,10" HorizontalAlignment="Center" TextWrapping="Wrap"/>
+                    <TextBlock x:Name="ProductDescription" FontSize="16" Margin="0,10" HorizontalAlignment="Center" TextWrapping="Wrap"/>
                     <Grid Margin="0,10" HorizontalAlignment="Stretch">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock x:Name="ProductPrice" FontSize="20" FontWeight="Bold" 
-                                   Grid.Column="0" VerticalAlignment="Center" Margin="5"/>
-                        <ComboBox x:Name="VariantCmb" Grid.Column="1" Margin="5" 
-                                  DisplayMemberPath="Color" HorizontalAlignment="Stretch"/>
-                        <ComboBox x:Name="CmbTallas" Grid.Column="2" Margin="5" 
-                                  HorizontalAlignment="Stretch"/>
+                        <TextBlock x:Name="ProductPrice" FontSize="20" FontWeight="Bold" Grid.Column="0" VerticalAlignment="Center" Margin="5"/>
+                        <ComboBox x:Name="VariantCmb" Grid.Column="1" Margin="5" DisplayMemberPath="Color" HorizontalAlignment="Stretch"/>
+                        <ComboBox x:Name="CmbTallas" Grid.Column="2" Margin="5" HorizontalAlignment="Stretch"/>
                     </Grid>
                     <Grid Margin="0,10" HorizontalAlignment="Stretch">
                         <Grid.ColumnDefinitions>
@@ -73,16 +129,19 @@
                     </Grid>
                 </StackPanel>
             </ScrollViewer>
-            <Button x:Name="AddToCartButton" Content="Afegir al carretó" Width="200" Height="35" 
-                    Margin="0,10" Grid.Row="2" HorizontalAlignment="Center" Click="AddToCartButton_Click"/>
+
+            <!-- Botón para agregar al carrito -->
+            <Button x:Name="AddToCartButton" Content="Afegir al carretó" Click="AddToCartButton_Click" Style="{StaticResource ButtonStyle}" Grid.Row="2"/>
+
+            <!-- Control de stock -->
             <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10">
                 <TextBlock Text="Stock:" VerticalAlignment="Center" Margin="5"/>
                 <TextBox x:Name="StockTextBox" Width="50" Height="30" Margin="5" TextAlignment="Center"/>
-           
-                <Button x:Name="Desastock" Content="Desa Stock" Margin="10,5" Click="Desastock_Click"/>
+                <Button x:Name="Desastock" Content="Desa Stock" Margin="10,5" Click="Desastock_Click" Style="{StaticResource ButtonStyle}"/>
             </StackPanel>
-            
         </Grid>
+
+        <!-- Carrito -->
         <local:BotoCarreto 
             x:Name="BotoCarreto"
             Grid.Column="1"
@@ -90,6 +149,7 @@
             Padding="20,5"
             HorizontalAlignment="Right"
             VerticalAlignment="Bottom"
-            Cistell="{Binding cistell}"/>
+            Cistell="{Binding cistell}"
+            Usuari="{Binding user}"/>
     </Grid>
 </Window>
